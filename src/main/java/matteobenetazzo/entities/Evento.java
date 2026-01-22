@@ -6,7 +6,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "eventi")
-public class Evento {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_evento")
+public abstract class Evento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,12 +41,24 @@ public class Evento {
         return titolo;
     }
 
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
     public LocalDate getDataEvento() {
         return dataEvento;
     }
 
+    public void setDataEvento(LocalDate dataEvento) {
+        this.dataEvento = dataEvento;
+    }
+
     public Location getLocation() {
         return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override
@@ -52,7 +67,9 @@ public class Evento {
                 "id=" + id +
                 ", titolo='" + titolo + '\'' +
                 ", dataEvento=" + dataEvento +
+                ", location=" + location +
                 '}';
     }
 }
+
 

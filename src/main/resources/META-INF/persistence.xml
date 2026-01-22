@@ -7,6 +7,9 @@
         <class>matteobenetazzo.entities.Persona</class>
         <class>matteobenetazzo.entities.Location</class>
         <class>matteobenetazzo.entities.Evento</class>
+        <class>matteobenetazzo.entities.Concerto</class>
+        <class>matteobenetazzo.entities.PartitaDiCalcio</class>
+        <class>matteobenetazzo.entities.GaraDiAtletica</class>
         <class>matteobenetazzo.entities.Partecipazione</class>
 
         <properties>
@@ -16,8 +19,11 @@
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
+
 
 

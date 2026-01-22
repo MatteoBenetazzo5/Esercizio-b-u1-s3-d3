@@ -5,9 +5,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import matteobenetazzo.dao.EventoDAO;
 import matteobenetazzo.dao.LocationDAO;
-import matteobenetazzo.dao.PartecipazioneDAO;
-import matteobenetazzo.dao.PersonaDAO;
-import matteobenetazzo.entities.*;
+import matteobenetazzo.entities.Concerto;
+import matteobenetazzo.entities.GenereConcerto;
+import matteobenetazzo.entities.Location;
 
 import java.time.LocalDate;
 
@@ -17,31 +17,45 @@ public class Application {
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
 
-        PersonaDAO personaDAO = new PersonaDAO(em);
         LocationDAO locationDAO = new LocationDAO(em);
         EventoDAO eventoDAO = new EventoDAO(em);
-        PartecipazioneDAO partecipazioneDAO = new PartecipazioneDAO(em);
 
         // 1) LOCATION
-        Location sala = new Location("Sala Grande", "Roma");
-        locationDAO.save(sala);
+        Location stadio = new Location("Stadio Olimpico", "Roma");
+        locationDAO.save(stadio);
 
-        // 2) EVENTO (legato alla location)
-        Evento concerto = new Evento("Concerto", LocalDate.now(), sala);
-        eventoDAO.save(concerto);
+        // 2) CONCERTO streaming = true
+        Concerto concertoRock = new Concerto(
+                "Concerto Rock",
+                LocalDate.now(),
+                stadio,
+                GenereConcerto.ROCK,
+                true
+        );
+        eventoDAO.save(concertoRock);
 
-        // 3) PERSONA
-        Persona mario = new Persona("Mario", "Rossi", "mario.rossi@mail.it", LocalDate.of(1995, 5, 10), Sesso.M);
-        personaDAO.save(mario);
+        // 3) CONCERTO streaming = false
+        Concerto concertoPop = new Concerto(
+                "Concerto Pop",
+                LocalDate.now().plusDays(1),
+                stadio,
+                GenereConcerto.POP,
+                false
+        );
+        eventoDAO.save(concertoPop);
 
-        // 4) PARTECIPAZIONE (persona + evento + stato)
-        Partecipazione p1 = new Partecipazione(mario, concerto, StatoPartecipazione.CONFERMATA);
-        partecipazioneDAO.save(p1);
+        // 4) TEST JPQL
+        System.out.println("---- CONCERTI IN STREAMING ----");
+        eventoDAO.getConcertiInStreaming(true).forEach(c -> System.out.println(c));
+
+        System.out.println("---- CONCERTI ROCK ----");
+        eventoDAO.getConcertiPerGenere(GenereConcerto.ROCK).forEach(c -> System.out.println(c));
 
         em.close();
         emf.close();
     }
 }
+
 
 
 
